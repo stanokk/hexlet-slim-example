@@ -1,0 +1,14 @@
+<form action="/users" method="get">
+  <input type="search" name="name" value="<?= htmlspecialchars($name) ?>"  />
+  <input type="submit" value="Search" />
+</form>
+
+<table>
+  <?php foreach ($names as $name): ?>
+    <tr>
+      <td>
+	  <?= $name ?>
+      </td>
+    </tr>
+  <?php endforeach ?>
+</table>

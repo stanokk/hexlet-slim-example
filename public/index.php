@@ -12,6 +12,8 @@ $container->set('renderer', function () {
     return new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
 });
 
+$users = ['mike', 'mishel', 'adel', 'keks', 'kamila'];
+
 $app = AppFactory::createFromContainer($container);
 $app->addErrorMiddleware(true, true, true);
 
@@ -26,8 +28,11 @@ $app->get('/users/{id}', function ($request, $response, $args) {
 $app->get('/', function ($request, $response) {
     return $response->write('Welcome to Slim!');
 });
-$app->get('/users', function ($request, $response) {
-    return $response->write('GET /users');
+$app->get('/users', function ($request, $response) use ($users) {
+    $name = $request->getQueryParam('name');
+    $filteredNames = array_filter($users, fn($item) => str_contains($item, $name) ? $item : null); 
+    $params = ['names' => array_values($filteredNames), 'name' => $name];
+    return $this->get('renderer')->render($response, 'users/index.phtml', $params);
 });
 
 $app->post('/users', function ($request, $response) {
